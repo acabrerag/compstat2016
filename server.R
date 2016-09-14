@@ -13,11 +13,6 @@ library(shiny)
 # options(shiny.maxRequestSize = 9*1024^2)
 shinyServer(function(input,output,session){
   require(ggplot2)
-  
-    # Funciona para la actualizacion de la lista de campos
-    # This reactive function will take the inputs from UI.R and use them for read.table() to read the data
-    # from the file. It returns the dataset in the form of a dataframe.
-    # file$datapath -> gives the path of the file
 
   x <- reactive({
     x    <-runif(input$bins,0,1)   # Old Faithful Geyser data
@@ -177,9 +172,19 @@ shinyServer(function(input,output,session){
   
 
  
-  output$estim_MC <- renderText({
+  output$estim_MC <- renderUI({
     n <- nrow(data())
-    paste0('\nEstimacion con ', n,' simulaciones : ', round(data()$I_MC[n], 3))
+    #paste0('\nEstimacion con ', n,' simulaciones : ',round(data()$I_MC[n], 3))
+    texto=paste("\\int_{",input$a[1],"}^{",input$a[2],"}")
+    alain<-input$n
+    alain=alain-1
+    for (i in 1:alain){
+      texto=paste(texto,"\\int_{",input$a[1],"}^{",input$a[2],"}")
+    }
+    texto=paste(texto,"g(x)dx\\approx")
+    if(alain==0){
+      texto=paste("\\int_{",input$a[1],"}^{",input$a[2],"}g(x)dx\\approx")}
+    return (withMathJax(paste("$$\\mbox{La estimacion con }",n,"\\mbox{ simulaciones es: }",texto,round(data()$I_MC[n], 3),"$$")))
   })
   
   output$plot <- renderPlot({
@@ -189,9 +194,9 @@ shinyServer(function(input,output,session){
       p <- p + geom_ribbon(aes(ymin=lower, ymax=upper), fill='orange', alpha=0.5)
     }
       p +
-      labs(x='Número de simulaciones',
+      labs(x='Numero de simulaciones',
            y='I',
-           title='Estimación de la integral')
+           title='Estimacion de la integral')
   })
   output$data <- renderDataTable(round(data(), 3))
   

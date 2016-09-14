@@ -6,7 +6,7 @@ shinyUI(fluidPage(
     sidebarLayout(
         sidebarPanel(
             selectInput("opcion", "Tarea:", choices = c("Simulador Exponencial", "Region de rechazo",
-                                                           "Integrales-Montecarlo"), selected = 'Cargar archivo'),
+                                                           "Integrales-Montecarlo"), selected = 'Integrales-Montecarlo'),
             
             conditionalPanel(
               'input.opcion === "Integrales-Montecarlo"',
@@ -39,25 +39,24 @@ shinyUI(fluidPage(
             
   #------------------------------------------------------------------------------------------------------------          
   
-            conditionalPanel('input.opcion === "Region de rechazo"',
+            conditionalPanel('input.opcion === "Region de rechazo"', withMathJax(),
                 
                   h2("Aceptacion-Rechazo"),
                   textInput(
                     inputId="expresion1", 
-                    label="Funcion f",
+                    label="$$\\mbox{Funcion } f$$",
                     value="function(x) 2*x"
                   ),
                   selectInput(
                     inputId="expresion2", 
-                    label="Funcion g",
+                    label="$$\\mbox{Funcion } g$$",
                     choices=c("Uniforme(xmin, xmax)"="unif", "Exponencial(1) truncada a (xmin,xmax)"="exp", "Normal(0,1) truncada a (xmin,xmax)"="norm")
                   ),
                   sliderInput("xmin", "xmin", min=-30, max=30, value=0),
                   sliderInput("xmax", "xmax", min=-30, max=20, value=1),
-                  sliderInput("M", "M", min=0.1, max=100, value=1),
-                  numericInput("nsim", "Numero de simulaciones", value=100),
+                  sliderInput("M", "$$M$$", min=0.1, max=100, value=1),
+                  numericInput("nsim", "Numero de simulaciones", value=100)
                   
-                  actionButton("button1", "Correr")
                 )
             
             
@@ -78,7 +77,13 @@ shinyUI(fluidPage(
 #-----------------------------------------------------------------------------------------------------------------        
         conditionalPanel(condition="input.opcion=='Region de rechazo'",
                          tabsetPanel(
-                         tabPanel("Grafica de la region",h1('Region de rechazo'),plotOutput("Grafica")),
+                         tabPanel("Grafica de la region",h2('Region de rechazo'), h4('Objetivo: Simular observaciones de la distribución f'), 
+                                  h4('Descripción del algoritmo:'), 
+                                withMathJax()
+                                , h5("$$\\cdot\\mbox{Generar independientemente }U\\sim Unif[0,1]\\mbox{ y  }Y\\mbox{ de acuerdo a la densidad g. }$$")
+                                , h5("$$\\cdot\\mbox{Si }U\\leq\\frac{f(y)}{Mg(Y)}\\mbox{ se acepta el conjunto  }X=Y\\mbox{. En otro caso, volver al caso anterior y volver a empezar. }$$")
+                                , h5("$$\\mbox{ El conjunto resultante }X\\mbox{  se distribuye de acuerdo a la función de densidad }f$$")
+                                , plotOutput("Grafica")),
                          tabPanel("Resultados", p("Tasa de exito", textOutput("tasa_exito")),h1('Prueba de bondad de ajuste'),plotOutput("hist_sim") ,
                                   sliderInput("nbins", "nbins", value=20, min=10, max=100)
 )
@@ -88,8 +93,8 @@ shinyUI(fluidPage(
 , conditionalPanel(condition="input.opcion=='Integrales-Montecarlo'",
                    tabsetPanel(
                      #         tabPanel('Hist', plotOutput('random_hist')),
-                     tabPanel('Grafica',
-                              h5(textOutput('estim_MC')),
+                     tabPanel('Grafica',h4('Esta app permite estimar el valor de una integral sobre un hiper-cubo.'),
+                              withMathJax(uiOutput('estim_MC')),
                               plotOutput('plot', width = '8in', height = '3in'),
                               checkboxInput('ribbon', 'Mostrar intervalos de confianza', value = TRUE)
                               
