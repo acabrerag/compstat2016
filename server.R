@@ -12,8 +12,11 @@ library(shiny)
 # is increased from 5MB to 9MB
 # options(shiny.maxRequestSize = 9*1024^2)
 shinyServer(function(input,output,session){
+  
+  
   require(ggplot2)
-
+  #--------------------------------------Tarea 1------------------------------------------------------ 
+  
   x <- reactive({
     x    <-runif(input$bins,0,1)   # Old Faithful Geyser data
     x=-1*(input$lambda)*log(x)
@@ -56,7 +59,7 @@ shinyServer(function(input,output,session){
       ks.test(x(), "pexp", fit2$estimate) 
     })
     output$table <- renderTable({
-
+      
       data.frame(x())
     })
     output$pvalChi <- renderPrint({
@@ -80,19 +83,12 @@ shinyServer(function(input,output,session){
       })})
   
   
- #-------------------------------------------------------------------------------------------- 
-  #Tarea 2 aceptacion-rechazo
+  #--------------------------------------Tarea 2------------------------------------------------------ 
   fun1 <- reactive({
     texto <- paste("aux <- ", input$expresion1)
     eval(parse(text=texto))
-    aux
   })
   
-  funMC <- reactive({
-    texto <- paste("aux <- ", input$expresionMC)
-    eval(parse(text=texto))
-    aux
-  })
   
   fun2 <- reactive({
     switch(input$expresion2,
@@ -147,9 +143,9 @@ shinyServer(function(input,output,session){
   })
   
   
-  #Tarea 3--------------------------------------------------------------------------
+  #--------------------------------------Tarea 3------------------------------------------------------ 
   I_MC <- reactive({
-  I <- numeric(input$N)
+    I <- numeric(input$N)
     phix <- I
     lower <- I
     upper <- I
@@ -157,7 +153,10 @@ shinyServer(function(input,output,session){
     for(i in 1:input$N){
       x <- runif(input$n, 0, 1)
       x<-x*(input$a[2]-input$a[1] )+input$a[1] 
-      phix[i] <-sapply(x, funMC())
+      texto <- paste("aux <- ", input$expresionMC)
+      
+      phix[i] <-eval(parse(text=texto))
+      
       s[i] <- sd(phix[1:i])
       I[i] <- (input$a[2]-input$a[1] )**input$n*mean(phix[1:i])
       #Intervalos de confianza
@@ -170,8 +169,8 @@ shinyServer(function(input,output,session){
     cbind(nsim=1:input$N, I_MC())
   })
   
-
- 
+  
+  
   output$estim_MC <- renderUI({
     n <- nrow(data())
     #paste0('\nEstimacion con ', n,' simulaciones : ',round(data()$I_MC[n], 3))
@@ -193,7 +192,7 @@ shinyServer(function(input,output,session){
     if(input$ribbon){
       p <- p + geom_ribbon(aes(ymin=lower, ymax=upper), fill='orange', alpha=0.5)
     }
-      p +
+    p +
       labs(x='Numero de simulaciones',
            y='I',
            title='Estimacion de la integral')
@@ -211,7 +210,7 @@ shinyServer(function(input,output,session){
   
   
   
-
+  
 })
 
 
