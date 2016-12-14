@@ -5,8 +5,8 @@ shinyUI(fluidPage(
     titlePanel("Alain Cabrera"),
     sidebarLayout(
         sidebarPanel(
-            selectInput("opcion", "Tarea:", choices = c("Tarea 1", "Tarea 2","Tarea 4"), selected = 'Tarea 4'),
-            
+          radioButtons("opcion", label = h3("Tarea:"), choices = c("Tarea 1", "Tarea 2","Tarea 4"), selected = 'Tarea 4'),
+  
  #----------------------------------.
  conditionalPanel(
               'input.opcion === "Tarea 4"',
@@ -80,9 +80,14 @@ h5('Se utilizarán las distribuciones a priori:'),
 withMathJax('$$\\beta_j\\sim N(0,100)$$'),
 withMathJax('$$\\sigma\\sim exp\\left(\\frac{1}{10}\\right)$$'),
 h5('NOTA: Sólo se utilizó una cadena por parámetro. El parámetro de brinco utilizado fue de 0.1'),
+h5('A continuación se muestra el gráfico de dispersión de la base de datos iris.'),
+plotOutput('iris'),
+h5('RESULTADO:'),
+#verbatimTextOutput('value'),
+withMathJax(uiOutput('tableMH')),
+withMathJax(uiOutput('tableMH2'))
 
-                                    #Distribuciones a priori
-                                              plotOutput('iris'),verbatimTextOutput('value'),withMathJax(uiOutput('tableMH2')),withMathJax(uiOutput('tableMH'))),
+),
 
                            tabPanel('Histogramas',h4('A continuación.'),plotOutput('ploH')
                                     
