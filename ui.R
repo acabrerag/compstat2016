@@ -2,7 +2,7 @@ library(shiny)
 
 
 shinyUI(fluidPage(
-    titlePanel("Alain Cabrera"),
+    titlePanel("Alain Cabrera (000113332)"),
     sidebarLayout(
         sidebarPanel(
           radioButtons("opcion", label = h3("Tarea:"), choices = c("Tarea 1", "Tarea 2","Tarea 4"), selected = 'Tarea 4'),
@@ -89,15 +89,15 @@ withMathJax(uiOutput('tableMH2'))
 
 ),
 
-                           tabPanel('Histogramas',h4('A continuación.'),plotOutput('ploH')
+                           tabPanel('Histogramas',h4('A continuación se presentan los histogramas obtenidos para cada parámetro.'),plotOutput('ploH')
                                     
                            ),
                            
                            
-                           tabPanel('Densidad',h4('Esta app permite estimar el valor de una integral sobre un hiper-cubo.'),plotOutput('ploPP')
+                           tabPanel('Densidad',h4('Aqui se presentan la distribución a priori y la posterior obtenida.'),plotOutput('ploPP')
                                     
                            ),
-                           tabPanel('Datos', h4('Esta app permite estimar el valor de una integral sobre un hiper-cubo.'),dataTableOutput("tablechain"))))
+                           tabPanel('Datos', h4('A continuación se presentan las simulación de las cadenas para cada parámetro.'),dataTableOutput("tablechain"))))
         
         ,
         

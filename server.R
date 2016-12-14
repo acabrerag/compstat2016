@@ -337,11 +337,11 @@ tabla<<-Comparison
           #hist(estims[ ,j], prob=TRUE,  breaks=20, col="lightblue",
           #    main="Histogram and Posterior(blue) vs Prior(red) of the Mean")
           # plot(prior.beta, xlim=c(min(estims[ ,j]),max(estims[ ,j])), col="darkred", lwd="2", ylim=c(0,10), add=TRUE)
-          plot(density(estims[ ,j]),main=paste("Densidad Posterior(azul) vs Prior(rojo) de beta_",j-1), xlim=c(-3,1+max(estims[ ,j])),col="darkblue", lwd="2")
+          plot(density(estims[ ,j]),main=paste("Densidad Posterior(azul) vs Prior(rojo) de beta_",j-1),xlab="", xlim=c(-3,1+max(estims[ ,j])),col="darkblue", lwd="2")
           lines(density(rnorm(1000, mean = 0,sd = 1)),col="darkred")
         }
         
-        plot(density(estims_sigma), col="darkblue",main="Densidad Posterior(azul) vs Prior(rojo) de sigma", lwd="2",xlim=c(-3,max(estims_sigma)))
+        plot(density(estims_sigma), col="darkblue",main="Densidad Posterior(azul) vs Prior(rojo) de sigma", xlab="", lwd="2",xlim=c(-3,max(estims_sigma)))
         lines(density(rnorm(1000, mean = 0,sd = 1)),col="darkred")
         par(mfrow=c(1,1))
       })  
